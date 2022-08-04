@@ -21,22 +21,11 @@ const userSchema=new Schema({
     },
     role:{
         type:String,
-        enum:["users","staff","manager","admin"],
-        default:"users"
+        enum:["user","staff","manager","admin"],
+        default:"user"
+    }
+    
     },
-    isAdmin:{
-       type: Boolean,
-       default:0
-   },
-    isStaff:{
-    type: Boolean,
-    default:0
-    },  
-    isManager:{
-    type: Boolean,
-    default:0
-    },
-},
 {
     timestamps:true
 })

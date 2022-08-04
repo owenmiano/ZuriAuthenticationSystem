@@ -16,34 +16,31 @@ exports.registerUser=async(req,res)=>{
  }
  const {password,email,firstName,lastName,role}=req.body
  //  validate if user doesnt already exist
-//  let user=Users.find((user)=>{
-//     return user.email===email
-//   })
-// if(user){
-//   return  res.status(400).json({
-//         errors:[
-//             {
-//                 "msg":"This user already exists"
-//             }
-//         ]
+ const emailExist=await Users.findOne({email});
+if(emailExist){
+  return  res.status(400).json({
+        errors:[
+            {
+                "msg":"This user already exists"
+            }
+        ]
         
-//     })
-// }
+    })
+}
 
 const  hashedPassword=await bcrypt.hash(password,10)
-
-    Users.create({
-        firstName:firstName,
-        lastName:lastName,
-        email:email,
-        role:role,
-        password:hashedPassword
-      })
-      const token=await JWT.sign({email},
-          process.env.TOKEN,{
-          expiresIn:3600000
-        })
-       
-        return res.json({message:`Added user:${email} successfully!`,token})
+try {
+  const newUser= await Users.create({
+    firstName,
+    lastName,
+    email,
+    role,
+    password:hashedPassword
+  })
+ return res.json({message:`Hurray! you have registered successfully.`})
+} catch (error) {
+  
+}
+   
         
       }
