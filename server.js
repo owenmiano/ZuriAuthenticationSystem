@@ -6,7 +6,7 @@ const port=process.env.PORT;
 const connectDB=require('./dbConn')
 const auth=require('./routes/user')
 const passport = require("passport");
-
+const books=require("./routes/book")
 
 // Initialize  middlewares
 app.use(express.json())
@@ -22,6 +22,8 @@ app.get('/',(req,res)=>{
     res.send('Welcome to zuri authentication system')
 })
 app.use('/auth',auth)
+app.use('/book',books)
+
 // test db connection
 
 mongoose.connection.once('open',()=>{

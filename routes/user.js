@@ -1,7 +1,8 @@
 const router=require('express').Router();
 const {check}=require("express-validator")
 const {userRegister,userLogin, serializeUser,userAuth,checkRole}=require('../utils/Auth')
-// const checkAuth=require('../middleware/auth')
+const userController=require("../controllers/userController")
+
 // Users Registration Route
 router.post("/register-user",[
     check("email","Please provide a valid email").isEmail(),
@@ -14,7 +15,7 @@ router.post("/register-user",[
    await userRegister(req,"user",res)
  })
 
-
+// ALL REGISTRATION ROUTES
 // Staff Registration Route
 router.post("/register-staff",[
     check("email","Please provide a valid email").isEmail(),
@@ -49,6 +50,7 @@ router.post("/register-admin",[
     await userRegister(req,"admin",res)
 })
 
+// ALL LOGIN ROUTES
 // Users Login Route
 router.post("/login-user",[
     check("email","Please provide a valid email").isEmail(),
@@ -86,25 +88,16 @@ router.post("/login-admin",[
     await userLogin(req,"admin",res)
 })
 
-// Profile Route
+// View one's Profile Information
 router.get("/profile",userAuth, async(req,res)=>{
  return res.json(serializeUser(req.user))
 })
 
-// Users Protected Route
-router.get("/user-protected",userAuth, checkRole(["user"]), async(req,res)=>{
-    return res.json(`hello ${req.user.firstName}, your role:${req.user.role}`);
-})
-// Staff Protected Route
-router.get("/staff-protected",userAuth,checkRole(["staff"]), async(req,res)=>{
-    return res.json(`hello ${req.user.firstName}, your role:${req.user.role}`);
-})
-// Managers Protected Route
-router.get("/manager-protected",userAuth, checkRole(["manager"]), async(req,res)=>{
-    return res.json(`hello ${req.user.firstName}, your role:${req.user.role}`);
-})
-// Admin Protected Route
-router.get("/admin-protected",userAuth, checkRole(["admin"]), async(req,res)=>{
-    return res.json(`hello ${req.user.firstName}, your role:${req.user.role}`);
-})
+// PASSWORD RECOVERY
+router.put("/passwordRecovery",userAuth,[
+    check("email","Please provide a valid email").isEmail(),
+    check("password","Please provide a password that is greater than 5 characters").isLength({
+        min:6
+    })
+],userController.recoverAccount)
 module.exports=router;     
