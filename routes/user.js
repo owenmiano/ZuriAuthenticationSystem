@@ -3,6 +3,7 @@ const {check}=require("express-validator")
 const {userRegister,userLogin, serializeUser,userAuth,checkRole}=require('../utils/Auth')
 const userController=require("../controllers/userController")
 
+// ALL REGISTRATION ROUTES
 // Users Registration Route
 router.post("/register-user",[
     check("email","Please provide a valid email").isEmail(),
@@ -15,7 +16,6 @@ router.post("/register-user",[
    await userRegister(req,"user",res)
  })
 
-// ALL REGISTRATION ROUTES
 // Staff Registration Route
 router.post("/register-staff",[
     check("email","Please provide a valid email").isEmail(),
